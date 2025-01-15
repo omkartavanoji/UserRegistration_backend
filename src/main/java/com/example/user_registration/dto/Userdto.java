@@ -1,13 +1,18 @@
 package com.example.user_registration.dto;
 
-import org.springframework.stereotype.Component;
+import java.util.ArrayList;
+import java.util.List;
 
-import jakarta.annotation.Generated;
-import jakarta.persistence.Column;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -17,7 +22,7 @@ import lombok.Data;
 @Data
 @Entity
 public class Userdto {
-	@GeneratedValue(strategy =GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	int id;
 	@NotEmpty(message = "Username must not be empty")
@@ -32,4 +37,14 @@ public class Userdto {
 	@NotEmpty
 	@Pattern(regexp = "^.*(?=.{8,})(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", message = "Password must contain at least 8 characters, including upper/lowercase, digits, and special characters.")
 	private String password;
+	private String imageUrl;
+	
+	@Transient
+	private MultipartFile userImage;
+	
+	@Transient
+	private List<MultipartFile> userDocuments;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<UserDocuments> documents;
 }
