@@ -35,7 +35,7 @@ import jakarta.validation.Valid;
  * REST Controller for handling user-related operations
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/")
 @CrossOrigin
 public class UserController {
 
@@ -54,7 +54,7 @@ public class UserController {
 	 * @return ResponseEntity containing the result of the operation
 	 * @throws IOException
 	 */
-	@PostMapping
+	@PostMapping("/users")
 	public ResponseEntity<Object> addUser(@Valid @ModelAttribute Userdto userdto, BindingResult bindingResult)
 			throws IOException {
 		return userService.addUser(userdto, bindingResult);
@@ -70,7 +70,8 @@ public class UserController {
 	public Object getUserById(@RequestParam int id) {
 		return userService.getUserById(id);
 	}
-
+	
+	
 	/**
 	 * Retrieves a user by their username
 	 * 
@@ -120,7 +121,7 @@ public class UserController {
 	 * 
 	 * @return List of all users
 	 */
-	@GetMapping()
+	@GetMapping("/users")
 	public Object fetchAll() {
 		return userService.fetchAll();
 	}
@@ -135,14 +136,14 @@ public class UserController {
 	@PostMapping("/login")
 	public ResponseEntity<Object> loginUser(@RequestParam String username, @RequestParam String password) {
 		return userService.loginUser(username, password);
-	}
+	} 
 
 	@DeleteMapping("{id}")
 	public String deleteUserById(@PathVariable int id) {
 		return userService.deleteUserById(id);
 	}
 
-	@GetMapping("/uploads/documents/{filename}")
+	@GetMapping("/users/uploads/documents/{filename}")
 	public ResponseEntity<Resource> getFile(@PathVariable String filename) {
 		try {
 			Path filePath = Paths.get("uploads/documents/" + filename);
@@ -151,7 +152,6 @@ public class UserController {
 			if (!resource.exists()) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 			}
-
 			
 			String contentType = Files.probeContentType(filePath);
 			if (contentType == null) {
